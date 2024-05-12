@@ -1,9 +1,7 @@
 ﻿namespace Game2Test
 {
     public class Player:IBarDraw
-    {
-        public event Action? Died;
-        public event Action? LeveledUp;
+    {        
         private Logger _logger;
         public int PlayerPositionX { get; private set; }
         public int PlayerPositionY { get; private set; }
@@ -80,7 +78,6 @@
         private void Die()
         {
             _logger.AddLog("Игрок погиб!");
-            Died?.Invoke();
         }
 
 
@@ -103,9 +100,8 @@
         {
             _maxHealth += health;
             _health = _maxHealth;
-            _logger.AddLog($"Максимальное здоровье увеличено на: {health}. Новое максимальное здоровье: {_maxHealth}");
+            _logger.AddLog($"Максимальное здоровье увеличено на: {health}.");
         }
-
         public void AddExperience(int exp)
         {
             _experience += exp;
@@ -124,7 +120,6 @@
             IncreaseMaxHealth(50);
             SetDamage(_damage + 10);
             _logger.AddLog("Поздравляем! Уровень повышен!");
-            LeveledUp?.Invoke();
         }
 
         public void GiveHealthForBars(ref int health, ref int MaxHealt)

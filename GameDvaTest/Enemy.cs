@@ -22,7 +22,7 @@ namespace Game2Test
         {
             ScaleEnemy(playerLevel);
         }
-
+        
         public int CalculateDamage()
         {
             Random rand = new Random();
@@ -51,8 +51,8 @@ namespace Game2Test
             _health += (20 * playerLevel);
             _maxHealth +=(20 * playerLevel);
             _damage += (5 * playerLevel);
-        }
-              
+        }       
+
         public void GiveHealthForBars(ref int health, ref int MaxHealt)
         {
             health = _health;

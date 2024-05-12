@@ -33,7 +33,10 @@ namespace Game2Test
                 nextBarPositionY = 14;
                 _map.DrawMap();
                 _player.DrawPlayer();
-                DrawPlayerHealthBar(_player); 
+                DrawPlayerHealthBar(_player);
+                if(_enemy is not null)                
+                    DrawEnemyHealthBar(_enemy);
+                
 
                 int newX = _player.PlayerPositionX;
                 int newY = _player.PlayerPositionY;
@@ -56,10 +59,8 @@ namespace Game2Test
                     if(_enemy is not null)
                     {
                         StartFight(_player, _enemy);
-                        if (!_enemy.IsAlive())
-                        {
-                            _map.RemoveMonsterAt(newX, newY);
-                        }
+                        if (!_enemy.IsAlive())                        
+                            _map.RemoveMonsterAt(newX, newY);                        
                     }                    
                 }               
             }
@@ -71,7 +72,9 @@ namespace Game2Test
             while (enemy.IsAlive() && enemy is not null)
             {
                 DrawPlayerHealthBar(_player);
-                DrawEnemyHealthBar(enemy);
+                if (_enemy is not null)                
+                    DrawEnemyHealthBar(enemy);
+                
                 DrawActionChoices();
 
                 bool validInput = false;
@@ -87,6 +90,11 @@ namespace Game2Test
                         {
                             _logger?.AddLog("Враг повержен!");
                             _player.AddExperience(30);
+                            DrawPlayerHealthBar(_player);
+                            if (_enemy is not null)                            
+                                DrawEnemyHealthBar(_enemy);
+                            
+                            DrawActionChoices();
                             return;
                         }
 
@@ -95,6 +103,11 @@ namespace Game2Test
                         if (!player.IsAlive())
                         {
                             _logger?.AddLog("Игрок погиб!");
+                            DrawPlayerHealthBar(_player);
+                            if (_enemy is not null)                            
+                                DrawEnemyHealthBar(enemy);
+                            
+                            DrawActionChoices();
                             return;
                         }
 
@@ -108,8 +121,8 @@ namespace Game2Test
                     }
                 }               
             }
-        }
-
+            
+        }       
 
         public void DrawActionChoices()
         {
@@ -135,6 +148,8 @@ namespace Game2Test
             int MaxHealth = 0;
             int health = 0;
             barDraw.GiveHealthForBars(ref  health, ref MaxHealth);
+            if (health <= 0)
+                return;
 
             int PartSize = 12;
             int BarSize = MaxHealth / PartSize;
@@ -165,6 +180,8 @@ namespace Game2Test
             int MaxHealth = 0;
             int health = 0;
             barDraw.GiveHealthForBars(ref health, ref MaxHealth);
+            if (health <= 0)
+                return;
 
             int PartSize = 12;
             int BarSize = MaxHealth / PartSize;
