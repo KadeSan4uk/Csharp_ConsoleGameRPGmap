@@ -9,9 +9,9 @@ namespace Game2Test
 {
     public class Enemy:IBarDraw
     {
-        private int _health;
-        private int _maxHealth;
-        private int _damage;
+        private int _health=100;
+        private int _maxHealth=100;
+        private int _damage=10;
         private int _level;
         public bool IsAlive()
         {
@@ -26,7 +26,7 @@ namespace Game2Test
         public int CalculateDamage()
         {
             Random rand = new Random();
-            bool isHit = rand.Next(100) > 20;
+            bool isHit = rand.Next(100) > 10;
             if (!isHit) return 0; 
 
             int critChance = rand.Next(100);
@@ -41,17 +41,16 @@ namespace Game2Test
         {
             _health -= damage;
             if (_health <= 0)
-            {
-                Console.WriteLine("Enemy is defeated!");
-            }
+                return;          
+            
         }      
 
         private void ScaleEnemy(int playerLevel)
         {
             _level = playerLevel;
-            _health = 100 + (20 * playerLevel);
-            _maxHealth = _health;
-            _damage = 10 + (5 * playerLevel);
+            _health += (20 * playerLevel);
+            _maxHealth +=(20 * playerLevel);
+            _damage += (5 * playerLevel);
         }
               
         public void GiveHealthForBars(ref int health, ref int MaxHealt)

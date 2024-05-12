@@ -18,7 +18,7 @@ namespace Game2Test
             _logger = new Logger((message, line) =>
             {
                 Console.SetCursorPosition(_map.MapData.GetLength(0) + 2, line);
-                Console.WriteLine(message.PadRight(30, ' '));
+                Console.WriteLine(message.PadRight(50, ' '));
             });
 
             _inputHandler = new InputPLayer();
@@ -33,7 +33,7 @@ namespace Game2Test
                 nextBarPositionY = 14;
                 _map.DrawMap();
                 _player.DrawPlayer();
-                DrawPlayerHealthBar(); 
+                DrawPlayerHealthBar(_player); 
 
                 int newX = _player.PlayerPositionX;
                 int newY = _player.PlayerPositionY;
@@ -53,24 +53,24 @@ namespace Game2Test
                     _enemy = new Enemy(_player.Level);
                     _map.DrawMap();
                     _player.DrawPlayer();
-                    DrawEnemyHealthBar(_enemy); 
-                    StartFight(_player, _enemy);
-                    if (!_enemy.IsAlive())
+                    if(_enemy is not null)
                     {
-                        _map.RemoveMonsterAt(newX, newY);
-                    }
-                }
-               
+                        StartFight(_player, _enemy);
+                        if (!_enemy.IsAlive())
+                        {
+                            _map.RemoveMonsterAt(newX, newY);
+                        }
+                    }                    
+                }               
             }
-
         }
 
         public void StartFight(Player player, Enemy enemy)
         {
             _logger?.AddLog("Битва началась!");
-            while (enemy.IsAlive())
+            while (enemy.IsAlive() && enemy is not null)
             {
-                DrawPlayerHealthBar();
+                
                 DrawEnemyHealthBar(enemy);
                 DrawActionChoices();
 
@@ -83,7 +83,6 @@ namespace Game2Test
                     if (action != null)
                     {
                         action.ExecuteAction(player, enemy);
-
                         if (!enemy.IsAlive())
                         {
                             _logger?.AddLog("Враг повержен!");
@@ -93,7 +92,6 @@ namespace Game2Test
 
                         int enemyDamage = enemy.CalculateDamage();
                         player.TakeDamage(enemyDamage);
-
                         if (!player.IsAlive())
                         {
                             _logger?.AddLog("Игрок погиб!");
@@ -115,16 +113,16 @@ namespace Game2Test
 
         public void DrawActionChoices()
         {
-            int menuPositionY = nextBarPositionY;
+            int menuPositionY = nextBarPositionY+3;
             Console.SetCursorPosition(0, menuPositionY);
             Console.WriteLine("Выберите действие:");
             Console.WriteLine("1: Атака");
             Console.WriteLine("2: Защита");
             Console.WriteLine("3: Лечение");
         }
-        public void DrawPlayerHealthBar()
+        public void DrawPlayerHealthBar(Player player)
         {
-            DrawBars(_player, ConsoleColor.Green);
+            DrawBars(player, ConsoleColor.Green);
         }
 
         public void DrawEnemyHealthBar(Enemy enemy)
@@ -140,19 +138,12 @@ namespace Game2Test
 
             int PartSize = 13;
             int BarSize = MaxHealth / PartSize;
-            //if (BarSize == 0) BarSize = 1;
-
             int HealthSize = health / BarSize;
 
             string HealthStatus = $"{health}/{MaxHealth}";
 
             int barStartX = 0;
-            int barStartY = nextBarPositionY;
-
-            if (nextBarPositionY >= 20)
-            {
-                return;
-            }
+            int barStartY = nextBarPositionY;            
 
             Console.SetCursorPosition(barStartX, barStartY - 1);
             Console.Write(HealthStatus);
@@ -168,9 +159,6 @@ namespace Game2Test
             Console.Write(']');
             Console.WriteLine();
 
-            nextBarPositionY += 3;
         }
-
-
     }
 }
