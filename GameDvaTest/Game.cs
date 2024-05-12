@@ -70,7 +70,7 @@ namespace Game2Test
             _logger?.AddLog("Битва началась!");
             while (enemy.IsAlive() && enemy is not null)
             {
-                
+                DrawPlayerHealthBar(_player);
                 DrawEnemyHealthBar(enemy);
                 DrawActionChoices();
 
@@ -103,7 +103,7 @@ namespace Game2Test
                     else
                     {
                         int menuPositionY = nextBarPositionY;
-                        Console.SetCursorPosition(0, menuPositionY + 4);
+                        Console.SetCursorPosition(0, menuPositionY + 5);
                         Console.WriteLine("Неверный ввод, попробуйте снова.");
                     }
                 }               
@@ -113,7 +113,7 @@ namespace Game2Test
 
         public void DrawActionChoices()
         {
-            int menuPositionY = nextBarPositionY+3;
+            int menuPositionY = nextBarPositionY+6;
             Console.SetCursorPosition(0, menuPositionY);
             Console.WriteLine("Выберите действие:");
             Console.WriteLine("1: Атака");
@@ -122,21 +122,21 @@ namespace Game2Test
         }
         public void DrawPlayerHealthBar(Player player)
         {
-            DrawBars(player, ConsoleColor.Green);
+            DrawBarsPlayer(player, ConsoleColor.Green);
         }
 
         public void DrawEnemyHealthBar(Enemy enemy)
         {
-            DrawBars(enemy, ConsoleColor.Red);
+            DrawBarsEnemy(enemy, ConsoleColor.Red);
         }
 
-        public void DrawBars(IBarDraw barDraw, ConsoleColor barColor)
+        public void DrawBarsPlayer(IBarDraw barDraw, ConsoleColor barColor)
         {
             int MaxHealth = 0;
             int health = 0;
             barDraw.GiveHealthForBars(ref  health, ref MaxHealth);
 
-            int PartSize = 13;
+            int PartSize = 12;
             int BarSize = MaxHealth / PartSize;
             int HealthSize = health / BarSize;
 
@@ -145,7 +145,37 @@ namespace Game2Test
             int barStartX = 0;
             int barStartY = nextBarPositionY;            
 
-            Console.SetCursorPosition(barStartX, barStartY - 1);
+            Console.SetCursorPosition(barStartX+3, barStartY - 1);
+            Console.Write(HealthStatus);
+
+            Console.SetCursorPosition(barStartX, barStartY);
+            Console.Write('[');
+            for (int i = 0; i < PartSize; i++)
+            {
+                Console.BackgroundColor = i < HealthSize ? barColor : ConsoleColor.DarkGray;
+                Console.Write(" ");
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(']');
+            Console.WriteLine();
+
+        }
+        public void DrawBarsEnemy(IBarDraw barDraw, ConsoleColor barColor)
+        {
+            int MaxHealth = 0;
+            int health = 0;
+            barDraw.GiveHealthForBars(ref health, ref MaxHealth);
+
+            int PartSize = 12;
+            int BarSize = MaxHealth / PartSize;
+            int HealthSize = health / BarSize;
+
+            string HealthStatus = $"{health}/{MaxHealth}";
+
+            int barStartX = 0;
+            int barStartY = nextBarPositionY+3;
+
+            Console.SetCursorPosition(barStartX + 3, barStartY - 1);
             Console.Write(HealthStatus);
 
             Console.SetCursorPosition(barStartX, barStartY);

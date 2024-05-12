@@ -29,7 +29,7 @@
         public int CalculateDamage()
         {
             Random rand = new Random();
-            bool isHit = rand.Next(100) > 20;
+            bool isHit = rand.Next(100) > 10;
             if (!isHit) return 0;
 
             int critChance = rand.Next(100);
@@ -64,9 +64,11 @@
                 _isDefending = false;
                 _logger.AddLog($"Игрок защищен. Полученный урон сокращен до: {damage}");
             }
-
-            _health -= damage;
-            _logger.AddLog($"Игрок получил урон: {damage}. Текущее здоровье: {_health}");
+            else
+            {
+                _health -= damage;
+                _logger.AddLog($"Игрок получил урон: {damage}. Текущее здоровье: {_health}");
+            }           
 
             if (_health <= 0)
             {
