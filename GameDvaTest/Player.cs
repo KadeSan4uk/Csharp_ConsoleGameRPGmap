@@ -44,10 +44,10 @@
             return _damage;
         }
 
-        public bool Defend()
+        public void Defend()
         {
             _logger.AddLog("Игрок защищается.");
-            return _isDefending = true;
+            _isDefending = true;
         }
 
         public void Heal()

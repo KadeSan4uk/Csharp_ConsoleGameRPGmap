@@ -10,7 +10,7 @@ namespace Game2Test
     {
         public static void Main(string[] args)
         {
-            var game = new Game(@"D:\CsharpCourse\MyGame\bin\Debug\net8.0\map1.txt");
+            var game = new Game("D:map1.txt");
             game.Run();
             
         }

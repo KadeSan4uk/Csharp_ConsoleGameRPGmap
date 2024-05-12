@@ -60,10 +60,7 @@ namespace Game2Test
                         _map.RemoveMonsterAt(newX, newY);
                     }
                 }
-                else
-                {
-                    _player.UpdatePlayerPosition(newX, newY);
-                }
+               
             }
 
         }
@@ -81,7 +78,7 @@ namespace Game2Test
                 while (!validInput)
                 {
                     ConsoleKeyInfo pressedKey = Console.ReadKey(true);
-                    ICombatAction action = _inputHandler.HandleInputNumbers(pressedKey);
+                    ICombatAction action = _inputHandler.HandleInputNumbers(pressedKey);                   
 
                     if (action != null)
                     {
@@ -90,18 +87,15 @@ namespace Game2Test
                         if (!enemy.IsAlive())
                         {
                             _logger?.AddLog("Враг повержен!");
-                            DrawEnemyHealthBar(enemy);
                             return;
                         }
 
                         int enemyDamage = enemy.CalculateDamage();
                         player.TakeDamage(enemyDamage);
-                        DrawPlayerHealthBar();
 
                         if (!player.IsAlive())
                         {
                             _logger?.AddLog("Игрок погиб!");
-                            DrawPlayerHealthBar();
                             return;
                         }
 
@@ -113,7 +107,7 @@ namespace Game2Test
                         Console.SetCursorPosition(0, menuPositionY + 4);
                         Console.WriteLine("Неверный ввод, попробуйте снова.");
                     }
-                }
+                }               
             }
         }
 
@@ -143,9 +137,9 @@ namespace Game2Test
             int health = 0;
             barDraw.GiveHealthForBars(ref health, ref MaxHealth);
 
-            int PartSize = 13;
+            int PartSize = 10;
             int BarSize = MaxHealth / PartSize;
-            if (BarSize == 0) BarSize = 1;
+            //if (BarSize == 0) BarSize = 1;
 
             int HealthSize = health / BarSize;
 
@@ -154,7 +148,7 @@ namespace Game2Test
             int barStartX = 0;
             int barStartY = nextBarPositionY;
 
-            if (nextBarPositionY >= 14 + 6)
+            if (nextBarPositionY >= 20)
             {
                 return;
             }
