@@ -7,8 +7,8 @@
         private Logger _logger;
         public int PlayerPositionX { get; private set; }
         public int PlayerPositionY { get; private set; }
-        public int _health = 120;
-        public int _maxHealth = 120;
+        private int _health = 120;
+        private int _maxHealth = 120;
         private int _damage = 20;
         private int _level = 1;
         private int _experience = 0;

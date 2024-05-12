@@ -49,10 +49,13 @@ namespace Game2Test.InputPlayerStrategies
             switch (pressedKey.Key)
             {
                 case ConsoleKey.NumPad1:
+                case ConsoleKey.D1:
                     return new AttackAction();
                 case ConsoleKey.NumPad2:
+                case ConsoleKey.D2:
                     return new DefendAction();
                 case ConsoleKey.NumPad3:
+                case ConsoleKey.D3:
                     return new HealAction();
                 default:
                     return null;
