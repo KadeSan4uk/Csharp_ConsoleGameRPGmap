@@ -87,6 +87,7 @@ namespace Game2Test
                         if (!enemy.IsAlive())
                         {
                             _logger?.AddLog("Враг повержен!");
+                            _player.AddExperience(30);
                             return;
                         }
 
@@ -135,9 +136,9 @@ namespace Game2Test
         {
             int MaxHealth = 0;
             int health = 0;
-            barDraw.GiveHealthForBars(ref health, ref MaxHealth);
+            barDraw.GiveHealthForBars(ref  health, ref MaxHealth);
 
-            int PartSize = 10;
+            int PartSize = 13;
             int BarSize = MaxHealth / PartSize;
             //if (BarSize == 0) BarSize = 1;
 

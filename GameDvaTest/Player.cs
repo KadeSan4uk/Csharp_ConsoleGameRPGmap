@@ -52,8 +52,9 @@
 
         public void Heal()
         {
-            RestoreHealth(20);
-            _logger.AddLog($"Игрок исцелен на 20. Текущее здоровье: {_health}");
+            int heal = 20;
+            RestoreHealth(heal);
+            _logger.AddLog($"Игрок исцелен на {heal}. Текущее здоровье: {_health}");
         }
         public void TakeDamage(int damage)
         {
