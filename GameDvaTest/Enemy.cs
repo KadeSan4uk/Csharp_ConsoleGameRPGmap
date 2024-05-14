@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Game2Test
 {
     public class Enemy:IBarDraw
     {
+        Logger? _logger;
         private int _health=100;
         private int _maxHealth=100;
         private int _damage=10;
@@ -18,8 +20,9 @@ namespace Game2Test
             return _health > 0;
         }
 
-        public Enemy( int playerLevel)
+        public Enemy( int playerLevel,Logger logger)
         {
+            _logger = logger;
             ScaleEnemy(playerLevel);
         }
         
@@ -40,6 +43,7 @@ namespace Game2Test
         public void TakeDamage(int damage)
         {
             _health -= damage;
+            _logger.AddLog($"Монстр получил{damage} урона. У монстра осталось {_health} здоровья."); 
             if (_health <= 0)
                 return;          
             

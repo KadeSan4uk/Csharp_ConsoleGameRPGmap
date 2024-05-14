@@ -7,7 +7,7 @@ namespace Game2Test
     {
         private Map _map;
         private Player _player;
-        private Logger? _logger;
+        private Logger _logger;
         private Enemy? _enemy;
         private InputPLayer _inputHandler;
         private int nextBarPositionY = 14;
@@ -18,7 +18,7 @@ namespace Game2Test
             _logger = new Logger((message, line) =>
             {
                 Console.SetCursorPosition(_map.MapData.GetLength(0) + 2, line);
-                Console.WriteLine(message.PadRight(50, ' '));
+                Console.WriteLine(message.PadRight(60, ' '));
             });
 
             _inputHandler = new InputPLayer();
@@ -33,10 +33,7 @@ namespace Game2Test
                 nextBarPositionY = 14;
                 _map.DrawMap();
                 _player.DrawPlayer();
-                DrawPlayerHealthBar(_player);
-                if(_enemy is not null)                
-                    DrawEnemyHealthBar(_enemy);
-                
+                DrawPlayerHealthBar(_player);                              
 
                 int newX = _player.PlayerPositionX;
                 int newY = _player.PlayerPositionY;
@@ -53,14 +50,15 @@ namespace Game2Test
 
                 if (_map.IsMonsterAt(newX, newY))
                 {
-                    _enemy = new Enemy(_player.Level);
                     _map.DrawMap();
                     _player.DrawPlayer();
-                    if(_enemy is not null)
+                    _enemy = new Enemy(_player.Level, _logger);
+
+                    if (_enemy is not null)
                     {
                         StartFight(_player, _enemy);
-                        if (!_enemy.IsAlive())                        
-                            _map.RemoveMonsterAt(newX, newY);                        
+                        if (_enemy is null)
+                            _map.RemoveMonsterAt(newX, newY);
                     }                    
                 }               
             }
@@ -73,8 +71,8 @@ namespace Game2Test
             {
                 DrawPlayerHealthBar(_player);
                 if (_enemy is not null)                
-                    DrawEnemyHealthBar(enemy);
-                
+                    DrawEnemyHealthBar(enemy);  
+
                 DrawActionChoices();
 
                 bool validInput = false;
@@ -85,16 +83,18 @@ namespace Game2Test
 
                     if (action != null)
                     {
+
                         action.ExecuteAction(player, enemy);
                         if (!enemy.IsAlive())
                         {
+                            _enemy=null;
+                            ClearEnemyHealthBar();
                             _logger?.AddLog("Враг повержен!");
                             _player.AddExperience(30);
                             DrawPlayerHealthBar(_player);
                             if (_enemy is not null)                            
                                 DrawEnemyHealthBar(_enemy);
                             
-                            DrawActionChoices();
                             return;
                         }
 
@@ -107,7 +107,6 @@ namespace Game2Test
                             if (_enemy is not null)                            
                                 DrawEnemyHealthBar(enemy);
                             
-                            DrawActionChoices();
                             return;
                         }
 
@@ -122,16 +121,24 @@ namespace Game2Test
                 }               
             }
             
-        }       
+        }
+        public void ClearEnemyHealthBar()
+        {            
+            int barStartY = nextBarPositionY + 3;
+            Console.SetCursorPosition(0, barStartY - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, barStartY);
+            Console.Write(new string(' ', Console.WindowWidth));
+        }
 
         public void DrawActionChoices()
         {
-            int menuPositionY = nextBarPositionY+6;
-            Console.SetCursorPosition(0, menuPositionY);
-            Console.WriteLine("Выберите действие:");
-            Console.WriteLine("1: Атака");
-            Console.WriteLine("2: Защита");
-            Console.WriteLine("3: Лечение");
+                int menuPositionY = nextBarPositionY + 6;
+                Console.SetCursorPosition(0, menuPositionY);
+                Console.WriteLine("Выберите действие:");
+                Console.WriteLine("1: Атака");
+                Console.WriteLine("2: Защита");
+                Console.WriteLine("3: Лечение");                
         }
         public void DrawPlayerHealthBar(Player player)
         {
@@ -158,7 +165,9 @@ namespace Game2Test
             string HealthStatus = $"{health}/{MaxHealth}";
 
             int barStartX = 0;
-            int barStartY = nextBarPositionY;            
+            int barStartY = nextBarPositionY;
+            Console.SetCursorPosition(barStartX, barStartY - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
 
             Console.SetCursorPosition(barStartX+3, barStartY - 1);
             Console.Write(HealthStatus);
@@ -191,6 +200,9 @@ namespace Game2Test
 
             int barStartX = 0;
             int barStartY = nextBarPositionY+3;
+            
+            Console.SetCursorPosition(barStartX, barStartY - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
 
             Console.SetCursorPosition(barStartX + 3, barStartY - 1);
             Console.Write(HealthStatus);
