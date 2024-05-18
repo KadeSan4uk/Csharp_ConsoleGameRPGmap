@@ -30,22 +30,31 @@ namespace Game2Test
         {
             while (true)
             {
-                EnemyBarPosition = 14;
-                _map.DrawMap();
-                _player.DrawPlayer();
-                DrawPlayerHealthBar(_player);                              
+                UpdateGameView();                              
 
                 int newX = _player.X;
                 int newY = _player.Y;
-                MovementAction();
 
-                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
-                (newX, newY) = _inputHandler.HandleInputArrow(pressedKey, newX, newY, _map.MapData);
+                HandlePlayerMovement(ref newX,ref newY);
+
                 _player.UpdatePlayerPosition(newX, newY);
                 ClearActionChoices();
 
                 BattleAction(newX,newY);   
             }
+        }
+        public void UpdateGameView()
+        {
+            EnemyBarPosition = 14;
+            _map.DrawMap();
+            _player.DrawPlayer();
+            DrawPlayerHealthBar(_player);
+        }
+        private void HandlePlayerMovement(ref int newX, ref int newY)
+        {
+            MovementAction();
+            ConsoleKeyInfo pressedKey = Console.ReadKey(true);
+            (newX, newY) = _inputHandler.HandleInputArrow(pressedKey, newX, newY, _map.MapData);
         }
         public (int,int) BattleAction(int newX,int newY)
         {
