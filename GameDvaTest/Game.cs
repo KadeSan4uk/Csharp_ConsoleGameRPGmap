@@ -1,4 +1,6 @@
-﻿using Game2Test.PlayerActions;
+﻿using System;
+using System.Numerics;
+using Game2Test.PlayerActions;
 using Game2Test.InputPlayerStrategies;
 
 namespace Game2Test
@@ -106,32 +108,7 @@ namespace Game2Test
 
                     if (action != null)
                     {
-                        action.ExecuteAction(player, enemy);
-                        if (!enemy.IsAlive())
-                        {
-                            _enemy=null;
-                            ClearEnemyHealthBar();
-                            ClearActionChoices();
-                            _logger?.AddLog("Враг повержен!");
-                            _player.AddExperience(30);
-                            DrawBarPlayer(_player);
-                            if (_enemy is not null)                            
-                                DrawBarEnemy(_enemy);
-                            
-                            return;
-                        }
-
-                        int enemyDamage = enemy.CalculateDamage();
-                        player.TakeDamage(enemyDamage);
-                        if (!player.IsAlive())
-                        {
-                            _logger?.AddLog("Игрок погиб!");
-                            DrawBarPlayer(_player);
-                            if (_enemy is not null)                            
-                                DrawBarEnemy(enemy);
-                            
-                            return;
-                        }
+                        PerformActorsAction(action,player,enemy);
 
                         validInput = true;
 
@@ -141,6 +118,62 @@ namespace Game2Test
                         DrawValidInput();                                                                   
                 }               
             }            
+        }
+
+
+
+        public ICombatAction PerformActorsAction(ICombatAction action,Player player,Enemy enemy)
+        {
+            CombatPlayerActions(action, player, enemy);
+
+            EnemyAnswers(player, enemy);
+            return action;
+        }
+
+        public void EnemyAnswers(Player player,Enemy enemy)
+        {
+            if (enemy.IsAlive())
+                player.TakeDamage(enemy.CalculateDamage());
+
+            PlayerDieAction(player, enemy);
+        }
+
+        public ICombatAction CombatPlayerActions(ICombatAction action,Player player,Enemy enemy)
+        {
+            action.ExecutePlayerAction(player, enemy);
+            EnemyDieAction(enemy);
+
+            return action;
+        }
+
+        public void PlayerDieAction(Player player, Enemy enemy)
+        {
+            if (!player.IsAlive())
+            {
+                _logger?.AddLog("Игрок погиб!");
+                DrawBarPlayer(_player);
+                if (_enemy is not null)
+                    DrawBarEnemy(enemy);
+
+                return;
+            }
+        }
+
+        public void EnemyDieAction(Enemy enemy)
+        {
+            if (!enemy.IsAlive())
+            {
+                _enemy = null;
+                ClearEnemyHealthBar();
+                ClearActionChoices();
+                _logger?.AddLog("Враг повержен!");
+                _player.AddExperience(30);
+                DrawBarPlayer(_player);
+                if (_enemy is not null)
+                    DrawBarEnemy(_enemy);
+
+                return;
+            }
         }
 
         public void ClearEnemyHealthBar()
@@ -156,10 +189,10 @@ namespace Game2Test
         {
             int menuPositionY = EnemyBarPosition + 6;
             Console.SetCursorPosition(0, menuPositionY);
-            Console.WriteLine("                 ");
-            Console.WriteLine("            ");
-            Console.WriteLine("            ");
-            Console.WriteLine("            ");
+            Console.WriteLine("                   ");
+            Console.WriteLine("              ");
+            Console.WriteLine("              ");
+            Console.WriteLine("              ");
         }
 
         public void ClearValidInput()

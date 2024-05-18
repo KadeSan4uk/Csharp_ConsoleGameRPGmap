@@ -8,7 +8,7 @@ namespace Game2Test.PlayerActions
 {
     public class HealAction : ICombatAction
     {
-        public void ExecuteAction(Player player, Enemy enemy)
+        public void ExecutePlayerAction(Player player, Enemy enemy)
         {
             player.Heal();
         }

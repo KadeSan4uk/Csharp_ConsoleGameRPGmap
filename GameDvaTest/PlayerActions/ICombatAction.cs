@@ -8,7 +8,7 @@ namespace Game2Test.PlayerActions
 {
     public interface ICombatAction
     {
-        void ExecuteAction(Player player, Enemy enemy);
+        void ExecutePlayerAction(Player player, Enemy enemy);
 
     }
 }
