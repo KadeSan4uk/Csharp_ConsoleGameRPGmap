@@ -10,7 +10,7 @@ namespace Game2Test
         private Logger _logger;
         private Enemy? _enemy;
         private InputPLayer _inputHandler;
-        private int nextBarPositionY = 14;
+        private int EnemyBarPosition = 14;
         public Game(string path)
         {
             _map = new Map(path);
@@ -30,7 +30,7 @@ namespace Game2Test
         {
             while (true)
             {
-                nextBarPositionY = 14;
+                EnemyBarPosition = 14;
                 _map.DrawMap();
                 _player.DrawPlayer();
                 DrawPlayerHealthBar(_player);                              
@@ -44,20 +44,25 @@ namespace Game2Test
                 _player.UpdatePlayerPosition(newX, newY);
                 ClearActionChoices();
 
-                if (_map.IsMonsterAt(newX, newY))
-                {
-                    _map.DrawMap();
-                    _player.DrawPlayer();
-                    _enemy = new Enemy(_player.Level, _logger);
-
-                    if (_enemy is not null)
-                    {
-                        StartFight(_player, _enemy);
-                        if (_enemy is null)
-                            _map.RemoveMonsterAt(newX, newY);
-                    }                    
-                }               
+                BattleAction(newX,newY);   
             }
+        }
+        public (int,int) BattleAction(int newX,int newY)
+        {
+            if (_map.IsMonsterAt(newX, newY))
+            {
+                _map.DrawMap();
+                _player.DrawPlayer();
+                _enemy = new Enemy(_player.Level, _logger);
+
+                if (_enemy is not null)
+                {
+                    StartFight(_player, _enemy);
+                    if (_enemy is null)
+                        _map.RemoveMonsterAt(newX, newY);
+                }
+            }
+            return (newX, newY);
         }
         public void MovementAction()
         {
@@ -115,13 +120,13 @@ namespace Game2Test
 
                         validInput = true;
 
-                        int menuPositionY = nextBarPositionY;
+                        int menuPositionY = EnemyBarPosition;
                         Console.SetCursorPosition(0, menuPositionY + 5);
                         Console.WriteLine("                                   ");
                     }
                     else
                     {                
-                            int menuPositionY = nextBarPositionY;
+                            int menuPositionY = EnemyBarPosition;
                             Console.SetCursorPosition(0, menuPositionY + 5);
                             Console.WriteLine("Неверный ввод, попробуйте снова.");                                             
                     }
@@ -131,7 +136,7 @@ namespace Game2Test
         }
         public void ClearEnemyHealthBar()
         {            
-            int barStartY = nextBarPositionY + 3;
+            int barStartY = EnemyBarPosition + 3;
             Console.SetCursorPosition(0, barStartY - 1);
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, barStartY);
@@ -140,7 +145,7 @@ namespace Game2Test
 
         public void ClearActionChoices()
         {
-            int menuPositionY = nextBarPositionY + 6;
+            int menuPositionY = EnemyBarPosition + 6;
             Console.SetCursorPosition(0, menuPositionY);
             Console.WriteLine("                 ");
             Console.WriteLine("            ");
@@ -150,7 +155,7 @@ namespace Game2Test
 
         public void DrawActionChoices()
         {
-                int menuPositionY = nextBarPositionY + 6;
+                int menuPositionY = EnemyBarPosition + 6;
                 Console.SetCursorPosition(0, menuPositionY);
                 Console.WriteLine("Выберите действие:");
                 Console.WriteLine("1: Атака");
@@ -182,7 +187,7 @@ namespace Game2Test
             string HealthStatus = $"{health}/{MaxHealth}";
 
             int barStartX = 0;
-            int barStartY = nextBarPositionY;
+            int barStartY = EnemyBarPosition;
             Console.SetCursorPosition(barStartX, barStartY - 1);
             Console.Write(new string(' ', Console.WindowWidth));
 
@@ -216,7 +221,7 @@ namespace Game2Test
             string HealthStatus = $"{health}/{MaxHealth}";
 
             int barStartX = 0;
-            int barStartY = nextBarPositionY+3;
+            int barStartY = EnemyBarPosition+3;
             
             Console.SetCursorPosition(barStartX, barStartY - 1);
             Console.Write(new string(' ', Console.WindowWidth));
