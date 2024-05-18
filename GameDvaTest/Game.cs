@@ -30,18 +30,18 @@ namespace Game2Test
         {
             while (true)
             {
-                UpdateGameView();                              
-
-                int newX = _player.X;
-                int newY = _player.Y;
-
-                HandlePlayerMovement(ref newX,ref newY);
-
-                _player.UpdatePlayerPosition(newX, newY);
-                ClearActionChoices();
-
-                BattleAction(newX,newY);   
+                GiveMeGame(); 
             }
+        }
+        public void GiveMeGame()
+        {
+            UpdateGameView();
+
+            (int newX, int newY) = HandlePlayerMovement();
+
+            _player.UpdatePlayerPosition(newX, newY);
+
+            BattleAction(newX, newY);
         }
         public void UpdateGameView()
         {
@@ -50,11 +50,17 @@ namespace Game2Test
             _player.DrawPlayer();
             DrawPlayerHealthBar(_player);
         }
-        private void HandlePlayerMovement(ref int newX, ref int newY)
+        public (int, int) HandlePlayerMovement()
         {
+            int newX = _player.X;
+            int newY = _player.Y;
+
             MovementAction();
             ConsoleKeyInfo pressedKey = Console.ReadKey(true);
             (newX, newY) = _inputHandler.HandleInputArrow(pressedKey, newX, newY, _map.MapData);
+            ClearActionChoices();
+
+            return (newX, newY);
         }
         public (int,int) BattleAction(int newX,int newY)
         {
