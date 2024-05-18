@@ -43,7 +43,7 @@ namespace Game2Test
         public void TakeDamage(int damage)
         {
             _health -= damage;
-            _logger.AddLog($"Монстр получил{damage} урона. У монстра осталось {_health} здоровья."); 
+            _logger.AddLog($"Монстр получил {damage} урона. У монстра осталось {_health} здоровья."); 
             if (_health <= 0)
                 return;          
             
