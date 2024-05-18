@@ -37,16 +37,12 @@ namespace Game2Test
 
                 int newX = _player.PlayerPositionX;
                 int newY = _player.PlayerPositionY;
-
-                Console.SetCursorPosition(0, _map.MapData.GetLength(1));
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write($"Игрок на ({newX}, {newY}) координатах");
-
-                _logger?.ShowLog();                
+                MovementAction();
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey(true);
                 (newX, newY) = _inputHandler.HandleInputArrow(pressedKey, newX, newY, _map.MapData);
                 _player.UpdatePlayerPosition(newX, newY);
+                ClearActionChoices();
 
                 if (_map.IsMonsterAt(newX, newY))
                 {
@@ -62,6 +58,12 @@ namespace Game2Test
                     }                    
                 }               
             }
+        }
+        public void MovementAction()
+        {
+            Console.SetCursorPosition(0, _map.MapData.GetLength(1));
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write($"Передвижение: ← ↑ → ↓ ");
         }
 
         public void StartFight(Player player, Enemy enemy)
@@ -89,6 +91,7 @@ namespace Game2Test
                         {
                             _enemy=null;
                             ClearEnemyHealthBar();
+                            ClearActionChoices();
                             _logger?.AddLog("Враг повержен!");
                             _player.AddExperience(30);
                             DrawPlayerHealthBar(_player);
@@ -110,13 +113,17 @@ namespace Game2Test
                             return;
                         }
 
-                        validInput = true; 
-                    }
-                    else
-                    {
+                        validInput = true;
+
                         int menuPositionY = nextBarPositionY;
                         Console.SetCursorPosition(0, menuPositionY + 5);
-                        Console.WriteLine("Неверный ввод, попробуйте снова.");
+                        Console.WriteLine("                                   ");
+                    }
+                    else
+                    {                
+                            int menuPositionY = nextBarPositionY;
+                            Console.SetCursorPosition(0, menuPositionY + 5);
+                            Console.WriteLine("Неверный ввод, попробуйте снова.");                                             
                     }
                 }               
             }
@@ -129,6 +136,16 @@ namespace Game2Test
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, barStartY);
             Console.Write(new string(' ', Console.WindowWidth));
+        }
+
+        public void ClearActionChoices()
+        {
+            int menuPositionY = nextBarPositionY + 6;
+            Console.SetCursorPosition(0, menuPositionY);
+            Console.WriteLine("                 ");
+            Console.WriteLine("            ");
+            Console.WriteLine("            ");
+            Console.WriteLine("            ");
         }
 
         public void DrawActionChoices()
