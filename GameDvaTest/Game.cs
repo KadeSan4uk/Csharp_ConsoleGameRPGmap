@@ -35,8 +35,8 @@ namespace Game2Test
                 _player.DrawPlayer();
                 DrawPlayerHealthBar(_player);                              
 
-                int newX = _player.PlayerPositionX;
-                int newY = _player.PlayerPositionY;
+                int newX = _player.X;
+                int newY = _player.Y;
                 MovementAction();
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey(true);

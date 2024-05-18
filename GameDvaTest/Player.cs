@@ -3,8 +3,8 @@
     public class Player:IBarDraw
     {        
         private Logger _logger;
-        public int PlayerPositionX { get; private set; }
-        public int PlayerPositionY { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         private int _health = 120;
         private int _maxHealth = 120;
         private int _damage = 20;
@@ -16,8 +16,8 @@
 
         public Player(int startPositionX, int startPositionY, Logger logger)
         {
-            PlayerPositionX = startPositionX;
-            PlayerPositionY = startPositionY;
+            X = startPositionX;
+            Y = startPositionY;
             _logger = logger;
         }
         public bool IsAlive()
@@ -129,13 +129,13 @@
         }
         public void UpdatePlayerPosition(int x, int y)
         {
-            PlayerPositionX = x;
-            PlayerPositionY = y;
+            X = x;
+            Y = y;
         }
 
         public void DrawPlayer()
         {
-            Console.SetCursorPosition(PlayerPositionX, PlayerPositionY);
+            Console.SetCursorPosition(X, Y);
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write('@');
         }
