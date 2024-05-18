@@ -43,11 +43,13 @@ namespace Game2Test
         public void TakeDamage(int damage)
         {
             _health -= damage;
-            _logger.AddLog($"Монстр получил {damage} урона. У монстра осталось {_health} здоровья."); 
-            if (_health <= 0)
-                return;          
-            
-        }      
+            if (_health > 0)
+            {
+                _logger.AddLog($"Монстр получил {damage} урона. У монстра осталось {_health} здоровья.");
+            }
+            else if (_health <= 0)
+                return;
+        }
 
         private void ScaleEnemy(int playerLevel)
         {

@@ -120,15 +120,11 @@ namespace Game2Test
 
                         validInput = true;
 
-                        int menuPositionY = EnemyBarPosition;
-                        Console.SetCursorPosition(0, menuPositionY + 5);
-                        Console.WriteLine("                                   ");
+                        ClearValidInput();
                     }
                     else
-                    {                
-                            int menuPositionY = EnemyBarPosition;
-                            Console.SetCursorPosition(0, menuPositionY + 5);
-                            Console.WriteLine("Неверный ввод, попробуйте снова.");                                             
+                    {
+                        DrawValidInput();                                                 
                     }
                 }               
             }
@@ -151,6 +147,20 @@ namespace Game2Test
             Console.WriteLine("            ");
             Console.WriteLine("            ");
             Console.WriteLine("            ");
+        }
+
+        public void ClearValidInput()
+        {
+            int menuPositionY = EnemyBarPosition;
+            Console.SetCursorPosition(0, menuPositionY + 5);
+            Console.WriteLine("                                   ");
+        }
+
+        public void DrawValidInput()
+        {
+            int menuPositionY = EnemyBarPosition;
+            Console.SetCursorPosition(0, menuPositionY + 5);
+            Console.WriteLine("Неверный ввод, попробуйте снова.");
         }
 
         public void DrawActionChoices()
