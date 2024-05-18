@@ -48,7 +48,7 @@ namespace Game2Test
             EnemyBarPosition = 14;
             _map.DrawMap();
             _player.DrawPlayer();
-            DrawPlayerHealthBar(_player);
+            DrawBarPlayer(_player);
         }
         public (int, int) HandlePlayerMovement()
         {
@@ -79,6 +79,7 @@ namespace Game2Test
             }
             return (newX, newY);
         }
+
         public void MovementAction()
         {
             Console.SetCursorPosition(0, _map.MapData.GetLength(1));
@@ -91,9 +92,9 @@ namespace Game2Test
             _logger?.AddLog("Битва началась!");
             while (enemy.IsAlive() && enemy is not null)
             {
-                DrawPlayerHealthBar(_player);
+                DrawBarPlayer(_player);
                 if (_enemy is not null)                
-                    DrawEnemyHealthBar(enemy);  
+                    DrawBarEnemy(enemy);  
 
                 DrawActionChoices();
 
@@ -105,7 +106,6 @@ namespace Game2Test
 
                     if (action != null)
                     {
-
                         action.ExecuteAction(player, enemy);
                         if (!enemy.IsAlive())
                         {
@@ -114,9 +114,9 @@ namespace Game2Test
                             ClearActionChoices();
                             _logger?.AddLog("Враг повержен!");
                             _player.AddExperience(30);
-                            DrawPlayerHealthBar(_player);
+                            DrawBarPlayer(_player);
                             if (_enemy is not null)                            
-                                DrawEnemyHealthBar(_enemy);
+                                DrawBarEnemy(_enemy);
                             
                             return;
                         }
@@ -126,9 +126,9 @@ namespace Game2Test
                         if (!player.IsAlive())
                         {
                             _logger?.AddLog("Игрок погиб!");
-                            DrawPlayerHealthBar(_player);
+                            DrawBarPlayer(_player);
                             if (_enemy is not null)                            
-                                DrawEnemyHealthBar(enemy);
+                                DrawBarEnemy(enemy);
                             
                             return;
                         }
@@ -137,14 +137,12 @@ namespace Game2Test
 
                         ClearValidInput();
                     }
-                    else
-                    {
-                        DrawValidInput();                                                 
-                    }
+                    else                    
+                        DrawValidInput();                                                                   
                 }               
-            }
-            
+            }            
         }
+
         public void ClearEnemyHealthBar()
         {            
             int barStartY = EnemyBarPosition + 3;
@@ -187,17 +185,18 @@ namespace Game2Test
                 Console.WriteLine("2: Защита");
                 Console.WriteLine("3: Лечение");                
         }
-        public void DrawPlayerHealthBar(Player player)
+
+        public void DrawBarPlayer(Player player)
         {
-            DrawBarsPlayer(player, ConsoleColor.Green);
+            SetBarPlayer(player, ConsoleColor.Green);
         }
 
-        public void DrawEnemyHealthBar(Enemy enemy)
+        public void DrawBarEnemy(Enemy enemy)
         {
-            DrawBarsEnemy(enemy, ConsoleColor.Red);
+            SetBarEnemy(enemy, ConsoleColor.Red);
         }
 
-        public void DrawBarsPlayer(IBarDraw barDraw, ConsoleColor barColor)
+        public void SetBarPlayer(IBarDraw barDraw, ConsoleColor barColor)
         {
             int MaxHealth = 0;
             int health = 0;
@@ -229,9 +228,9 @@ namespace Game2Test
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Write(']');
             Console.WriteLine();
-
         }
-        public void DrawBarsEnemy(IBarDraw barDraw, ConsoleColor barColor)
+
+        public void SetBarEnemy(IBarDraw barDraw, ConsoleColor barColor)
         {
             int MaxHealth = 0;
             int health = 0;
@@ -264,7 +263,6 @@ namespace Game2Test
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Write(']');
             Console.WriteLine();
-
         }
     }
 }
