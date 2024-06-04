@@ -58,9 +58,11 @@
         {
             if (_isDefending)
             {
-                damage /= 2;
+                 damage /= 2;
+                _health -= damage;
+                _logger.AddLog($"Игрок защищен. Полученный урон сокращен на 50%");
+                _logger.AddLog($"Игрок получил урон: {damage}. Текущее здоровье: {_health}");
                 _isDefending = false;
-                _logger.AddLog($"Игрок защищен. Полученный урон сокращен до: {damage}");
             }
             else
             {
